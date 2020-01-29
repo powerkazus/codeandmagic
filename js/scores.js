@@ -3,7 +3,7 @@
 window.renderStatistics = function(ctx) {
   ctx.fillStyle = '#FDF9EC';
   ctx.strokeStyle = "#AC7536";
-  ctx.lineWidth = 5;
+  ctx.lineWidth = 8;
 
   //Frame
 
@@ -39,37 +39,42 @@ window.renderStatistics = function(ctx) {
   ctx.font = 'bold 18px PT Mono';
   ctx.fillText('А ты хорош!', 300, 40);
 
-  //Stats
+  //Players and stats
 
-  ctx.fillStyle = 'brown';
-  ctx.font = 'bold 14px PT Mono';
-  ctx.fillText('Леонардо', 150, 230);
+  var players = ['Леонардо', 'Микелянджело', 'Донателло', 'Рафаэль'];
+  var stats = [855, 1135, 355, 605];
 
-  ctx.fillStyle = 'brown';
-  ctx.font = 'bold 14px PT Mono';
-  ctx.fillText('Микелянджело', 250, 230);
+  var drawStats = function(names, points) {
+    var statPosition = 140;
+    var statMaxHeight = 135;
 
-  ctx.fillStyle = 'brown';
-  ctx.font = 'bold 14px PT Mono';
-  ctx.fillText('Донателло', 380, 230);
+    //Getting best score
 
-  ctx.fillStyle = 'brown';
-  ctx.font = 'bold 14px PT Mono';
-  ctx.fillText('Рафаэль', 490, 230);
+    function getMaxOfArray(numArray) {
+      return Math.max.apply(null, numArray);
+    }
+    var bestScore = getMaxOfArray(points);
 
-  //Rects
+    //Converting scores for histogram
 
-  ctx.fillStyle = 'rgb(54, 72, 254, 1)';
-  ctx.fillRect(165, 210, 30, -85);
+    for (var i = 0; i < points.length; i++) {
+      points[i] = Math.round(points[i] * statMaxHeight / bestScore);
+    }
 
-  ctx.fillStyle = 'rgb(54, 72, 254, 1)';
-  ctx.fillRect(285, 210, 30, -135);
+    //Drawing histogram
 
-  ctx.fillStyle = 'rgb(54, 72, 254, 1)';
-  ctx.fillRect(400, 210, 30, -55);
+    for (var i = 0; i < names.length; i++){
+      ctx.fillStyle = 'brown';
+      ctx.font = 'bold 14px PT Mono';
+      ctx.fillText(names[i], statPosition, 230);
 
-  ctx.fillStyle = 'rgb(54, 72, 254, 1)';
-  ctx.fillRect(505, 210, 30, -105);
+      ctx.fillStyle = 'rgb(54, 72, 254, 1)';
+      ctx.fillRect(statPosition + 10, 210, 30, points[i] * (-1));
 
+      statPosition += 120;
 
+    }
+  };
+
+  drawStats(players, stats);
 };
